@@ -4,7 +4,7 @@ from tabula import read_pdf
 
 jerosalem_shelters = pandas.read_csv("EN_Shelters.csv", encoding="ISO-8859-1")
 jerosalem_shelters = jerosalem_shelters.dropna()
-print(jerosalem_shelters[["Address","Area","Capacity"]])
+print(jerosalem_shelters)
 
 
 
