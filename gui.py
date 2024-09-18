@@ -1,14 +1,11 @@
 import sys
-
 import pygame
-
 import constants
 
 pygame.init()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
-pygame.display.set_caption("main menu")
-
+pygame.display.set_caption("Main Menu")
 
 # Function to draw a button
 def draw_button(text, x, y, width, height):
@@ -17,25 +14,36 @@ def draw_button(text, x, y, width, height):
     text_surface = font.render(text, True, constants.BLACK)  # Render the text
     screen.blit(text_surface, (x + 10, y + 10))  # Display text on the button
 
-
 # Function to handle button click events
 def check_button_click(mouse_pos, x, y, width, height):
     if x <= mouse_pos[0] <= x + width and y <= mouse_pos[1] <= y + height:
         return True  # Return True if the button is clicked
     return False
 
-
-# Function to open a new window based on the option clicked, with a Go Back button
-def open_option_window(option_text):
+# Function to open a new window for user input (specific to "User" button)
+def open_user_input_window():
     running = True
+    input_active = False  # Track if the input box is active for typing
+    user_text = ''  # Text input by the user
+    font = pygame.font.SysFont(None, 40)
+
     while running:
         screen.fill(constants.WHITE)  # Set background color to white
-        font = pygame.font.SysFont(None, 55)
-        text_surface = font.render(option_text, True, constants.BLACK)  # Show the selected option text
-        screen.blit(text_surface, (constants.SCREEN_WIDTH // 4, constants.SCREEN_HEIGHT // 3))
+
+        # Draw instructions
+        instruction_surface = font.render("Enter city name:", True, constants.BLACK)
+        screen.blit(instruction_surface, (50, 100))
+
+        # Draw the input box
+        input_box = pygame.Rect(50, 150, 300, 50)  # Rectangle for the input box
+        pygame.draw.rect(screen, constants.GRAY, input_box)
+
+        # Render the current user input text
+        user_input_surface = font.render(user_text, True, constants.BLACK)
+        screen.blit(user_input_surface, (input_box.x + 10, input_box.y + 10))
 
         # Draw the "Go Back" button
-        draw_button("Go Back", 200, 300, 200, 50)
+        draw_button("Go Back", 50, 250, 200, 50)
 
         pygame.display.flip()
 
@@ -44,12 +52,33 @@ def open_option_window(option_text):
                 pygame.quit()
                 sys.exit()  # Exit if the window is closed
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()  # Get mouse position
+                mouse_pos = pygame.mouse.get_pos()
 
                 # Check if "Go Back" button is clicked
-                if check_button_click(mouse_pos, 200, 300, 200, 50):
+                if check_button_click(mouse_pos, 50, 250, 200, 50):
                     running = False  # Go back to the main menu
 
+                # Check if the input box is clicked to activate text input
+                if input_box.collidepoint(event.pos):
+                    input_active = True
+                else:
+                    input_active = False
+
+            if event.type == pygame.KEYDOWN and input_active:
+                if event.key == pygame.K_RETURN:
+                    # Get the coordinates for the entered city
+                    city_coords = constants.get_city_coordinates(user_text)
+                    if city_coords:
+                        print(f"Coordinates of {user_text}: {city_coords}")
+                    else:
+                        print("City not found.")
+                    user_text = ''  # Clear the input after pressing Enter
+                elif event.key == pygame.K_BACKSPACE:
+                    # Remove the last character from the text input
+                    user_text = user_text[:-1]
+                else:
+                    # Append the typed character to the user_text string
+                    user_text += event.unicode
 
 # Main function for the menu
 def main_menu():
@@ -73,12 +102,11 @@ def main_menu():
 
                 # Check which button was clicked
                 if check_button_click(mouse_pos, 200, 100, 200, 50):
-                    open_option_window("User Selected")
+                    open_user_input_window()  # Open user input window
                 elif check_button_click(mouse_pos, 200, 170, 200, 50):
                     open_option_window("Admin Selected")
                 elif check_button_click(mouse_pos, 200, 240, 200, 50):
-                    open_option_window("manager Selected")
-
+                    open_option_window("Manager Selected")
 
 # Run the main menu
 main_menu()
