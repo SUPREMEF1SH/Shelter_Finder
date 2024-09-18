@@ -1,6 +1,4 @@
 import pandas
-import tabula
-from tabula import read_pdf
 
 jerosalem_shelters = pandas.read_csv("EN_Shelters.csv", encoding="ISO-8859-1")
 jerosalem_shelters = jerosalem_shelters.dropna()
