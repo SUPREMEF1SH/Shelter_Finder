@@ -9,7 +9,7 @@ df = pd.read_csv(csv_file_path)
 
 
 def create_map(user_loc):
-    mapObj = folium.Map(user_loc, zoom_start=17)
+    mapObj = folium.Map(user_loc, zoom_start=12)
     mCluster = MarkerCluster(name="Shelters").add_to(mapObj)
     add_shelters(mapObj, mCluster)
     return mapObj
@@ -22,7 +22,7 @@ def add_shelters(mapObj, mCluster):
             location=[float(location[0]), float(location[1])],
             tooltip=row['Name'],
             popup=f"We now have {row['Current Occupancy']}/{row['Capacity']}",
-            icon=folium.Icon(icon="cloud"),
+            icon=folium.Icon(icon="warning-sign"),
         ).add_to(mCluster)
 
     folium.LayerControl().add_to(mapObj)

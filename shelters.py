@@ -126,6 +126,14 @@ def update_population(shelter_num, id_num, full_name):
     update_shelter(shelters_data, shelter_num, "current_population", info)
 
 
+def get_shelter_value(shelter_num, key):
+    for shelter in shelters_data:
+        if shelter_num == shelter["shelter_number"]:
+            value = shelters_data[key]
+            return value
+    return None
+
+
 # Updating shelter example
 update_shelter(shelters_data, 1, 'capacity', 160)
 update_shelter(shelters_data, 2, 'utilities', {'Canned beans': 220})
@@ -133,5 +141,10 @@ update_population(1, 123456789, "shalom tubul")
 update_population(1, 215395559, "ofir raz")
 update_population(1,123456789,"Oded Yalo")
 
-for shelter in shelters_data:
-    print(shelter)
+def is_shelter_exist(user_text):
+    for shelter in shelters_data:
+        print("shelter ::: ", shelter.get("shelter_number"))
+        print("userText" ,user_text)
+        if shelter.get("shelter_number") == user_text:
+            return True
+    return False
