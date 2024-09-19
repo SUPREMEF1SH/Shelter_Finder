@@ -6,10 +6,7 @@ shelters_data = [
         "shelter_number": 1,
         "address": "Hatikva Neighborhood Shelter, Tel Aviv",
         "capacity": 160,
-        "current_population": [
-            ("shalom tubul", 123456789),
-            ("ofir raz", 215395559)
-        ],
+        "current_population": [],
         "longitude": 34.7736,
         "latitude": 32.0505,
         "utilities": {
@@ -29,9 +26,7 @@ shelters_data = [
         "shelter_number": 2,
         "address": "Shelter 4, Tel Aviv",
         "capacity": 200,
-        "current_population": [
-            ("Jane Smith", 475888626)
-        ],
+        "current_population": [],
         "longitude": 34.7760,
         "latitude": 32.0590,
         "utilities": {
@@ -51,9 +46,7 @@ shelters_data = [
         "shelter_number": 3,
         "address": "Shelter 3, Tel Aviv",
         "capacity": 120,
-        "current_population": [
-            ("Jane Smith", 475888626)
-        ],
+        "current_population": [],
         "longitude": 34.7701,
         "latitude": 32.0726,
         "utilities": {
@@ -73,9 +66,7 @@ shelters_data = [
         "shelter_number": 4,
         "address": "Neve Sha'anan Shelter, Tel Aviv",
         "capacity": 180,
-        "current_population": [
-            ("Jane Smith", 475888626)
-        ],
+         "current_population": [],
         "longitude": 34.7721,
         "latitude": 32.0416,
         "utilities": {
@@ -95,9 +86,7 @@ shelters_data = [
         "shelter_number": 5,
         "address": "Shelter 5, Tel Aviv",
         "capacity": 100,
-        "current_population": [
-            ("Jane Smith", 475888626)
-        ],
+         "current_population": [],
         "longitude": 34.7620,
         "latitude": 32.0548,
         "utilities": {
