@@ -1,97 +1,77 @@
-shelters_data = [
-    {
-        "shelter_number": 1,
-        "address": "Hatikva Neighborhood Shelter, Tel Aviv",
-        "capacity": 150,
-        "longitude": 34.7736,
-        "latitude": 32.0505,
-        "utilities": {
-            "Canned beans": 150,
-            "Canned vegetables": 150,
-            "Rice": 75,
-            "Pasta": 75,
-            "Canned fruit": 150,
-            "soap": 150,
-            "Instant oatmeal": 15,
-            "tooth paste": 150,
-            "toilet paper": 15,
-            "Shelf-stable milk": 75,
-        },
-    },
-    {
-        "shelter_number": 2,
-        "address": "Shelter 4, Tel Aviv",
-        "capacity": 200,
-        "longitude": 34.7760,
-        "latitude": 32.0590,
-        "utilities": {
-            "Canned beans": 200,
-            "Canned vegetables": 200,
-            "Rice": 100,
-            "Pasta": 100,
-            "Canned fruit": 200,
-            "soap": 200,
-            "Instant oatmeal": 20,
-            "tooth paste": 200,
-            "toilet paper": 20,
-            "Shelf-stable milk": 100,
-        },
-    },
-    {
-        "shelter_number": 3,
-        "address": "Shelter 3, Tel Aviv",
-        "capacity": 120,
-        "longitude": 34.7701,
-        "latitude": 32.0726,
-        "utilities": {
-            "Canned beans": 120,
-            "Canned vegetables": 120,
-            "Rice": 60,
-            "Pasta": 60,
-            "Canned fruit": 120,
-            "soap": 120,
-            "Instant oatmeal": 12,
-            "tooth paste": 120,
-            "toilet paper": 12,
-            "Shelf-stable milk": 60,
-        },
-    },
-    {
-        "shelter_number": 4,
-        "address": "Neve Sha'anan Shelter, Tel Aviv",
-        "capacity": 180,
-        "longitude": 34.7721,
-        "latitude": 32.0416,
-        "utilities": {
-            "Canned beans": 180,
-            "Canned vegetables": 180,
-            "Rice": 90,
-            "Pasta": 90,
-            "Canned fruit": 180,
-            "soap": 180,
-            "Instant oatmeal": 18,
-            "tooth paste": 180,
-            "toilet paper": 18,
-            "Shelf-stable milk": 90,
-        },
-    },
-    {
-        "shelter_number": 5,
-        "address": "Shelter 5, Tel Aviv",
-        "capacity": 100,
-        "longitude": 34.7620,
-        "latitude": 32.0548,
-        "utilities": {
-            "Canned beans": 100,
-            "Canned vegetables": 100,
-            "Rice": 50,
-            "Pasta": 50,
-            "Canned fruit": 100,
-            "soap": 100,
-            "Instant oatmeal": 10,
-            "tooth paste": 100,
-            "toilet paper": 10,
-            "Shelf-stable milk": 50,
-        },
-    },
-]
+import pandas as pd
+
+
+def read_shelters_from_csv(file_path):
+    df = pd.read_csv(file_path)
+    shelters = []
+
+    for _, row in df.iterrows():
+        shelter = {
+            "shelter_number": row['shelter_number'],
+            "address": row['address'],
+            "capacity": row['capacity'],
+            "longitude": row['longitude'],
+            "latitude": row['latitude'],
+            "utilities": {
+                "Canned beans": row.get('Canned beans', 0),
+                "Canned vegetables": row.get('Canned vegetables', 0),
+                "Rice": row.get('Rice', 0),
+                "Pasta": row.get('Pasta', 0),
+                "Canned fruit": row.get('Canned fruit', 0),
+                "soap": row.get('soap', 0),
+                "Instant oatmeal": row.get('Instant oatmeal', 0),
+                "tooth paste": row.get('tooth paste', 0),
+                "toilet paper": row.get('toilet paper', 0),
+                "Shelf-stable milk": row.get('Shelf-stable milk', 0),
+            },
+        }
+        shelters.append(shelter)
+
+    return shelters
+
+
+def update_shelter(shelters, shelter_number, key, value):
+    for shelter in shelters:
+        if shelter['shelter_number'] == shelter_number:
+            if key == 'capacity':
+                shelter['capacity'] = value
+            elif key == 'utilities':
+                # Check if the value is a dict and update utilities
+                if isinstance(value, dict):
+                    shelter['utilities'].update(value)
+                else:
+                    print("Error: Utilities value must be a dictionary.")
+            else:
+                print("Error: Invalid key. Use 'capacity' or 'utilities'.")
+            break
+    else:
+        print("Error: Shelter not found.")
+
+
+def save_shelters_to_csv(shelters, file_path):
+    flattened_data = []
+    for shelter in shelters:
+        flat_shelter = {
+            "shelter_number": shelter['shelter_number'],
+            "address": shelter['address'],
+            "capacity": shelter['capacity'],
+            "longitude": shelter['longitude'],
+            "latitude": shelter['latitude'],
+        }
+        flat_shelter.update(shelter['utilities'])
+        flattened_data.append(flat_shelter)
+
+    df = pd.DataFrame(flattened_data)
+    df.to_csv(file_path, index=False)
+
+
+file_path = 'shelters_data.csv'
+shelters_data = read_shelters_from_csv(file_path)
+print(shelters_data)
+
+# example
+update_shelter(shelters_data, 1, 'capacity', 160)
+update_shelter(shelters_data, 2, 'utilities', {'Canned beans': 220})
+
+# update csv
+save_shelters_to_csv(shelters_data, file_path)
