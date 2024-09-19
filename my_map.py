@@ -3,9 +3,12 @@ from folium.plugins import MarkerCluster
 import tempfile
 import webbrowser
 import pandas as pd
+import shelters
+import data_handling
+from data_handling import add_long_lat
 
 csv_file_path = 'shelters.csv'
-df = pd.read_csv(csv_file_path)
+df = add_long_lat
 
 
 def create_map(user_loc):
@@ -16,16 +19,17 @@ def create_map(user_loc):
 
 
 def add_shelters(mapObj, mCluster):
-    for index, row in df.iterrows():
-        location = row['Location'][1:-1].split(', ')  # Extract latitude and longitude
-        folium.Marker(
-            location=[float(location[0]), float(location[1])],
-            tooltip=row['Name'],
-            popup=f"We now have {row['Current Occupancy']}/{row['Capacity']}",
-            icon=folium.Icon(icon="warning-sign"),
-        ).add_to(mCluster)
+    for address in df:
+        for loc in address:
+            location = [loc[0], loc[1]] # Extract latitude and longitude
+            folium.Marker(
+                location=[float(location[1]), float(location[0])],
+                tooltip=address,
+                popup=f"We now have {0}/{200}",
+                icon=folium.Icon(icon="warning-sign"),
+            ).add_to(mCluster)
 
-    folium.LayerControl().add_to(mapObj)
+        folium.LayerControl().add_to(mapObj)
 
 
 def open_map_in_web(mapObj):

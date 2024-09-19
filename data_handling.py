@@ -10,34 +10,34 @@ jerusalem_shelters.reset_index(drop=True, inplace=True)
 print(jerusalem_shelters)
 j_shelters = jerusalem_shelters.copy()
 
-def jerusalem_addresses(jerusalem_shelters):
-    # calling the Nominatim tool and create Nominatim class
-    loc = Nominatim(user_agent="Geopy Library")
 
-    addresses = jerusalem_shelters[["Address"]]
-    add_long_lat = {}
-    for address in range(len(addresses)):
-        real_address = jerusalem_shelters['Address'].loc[jerusalem_shelters.index[address]]
+# calling the Nominatim tool and create Nominatim class
+loc = Nominatim(user_agent="Geopy Library")
 
-        if real_address[0].isdigit():
-            add = real_address.split(" ")
-            add.append(add[0])
-            add.pop(0)
-            real_address = " ".join(add)
-            # print(real_address)
+addresses = jerusalem_shelters[["Address"]]
+add_long_lat = {}
+for address in range(len(addresses)):
+    real_address = jerusalem_shelters['Address'].loc[jerusalem_shelters.index[address]]
 
-        # # entering the location name
-        getLoc = loc.geocode("Jerusalem " + real_address,timeout=100)
-        if getLoc == None:
-            index = jerusalem_shelters[(jerusalem_shelters.Address == real_address)].index
-            jerusalem_shelters.drop(index)
-            continue
-        jerusalem_shelters.insert()
+    if real_address[0].isdigit():
+        add = real_address.split(" ")
+        add.append(add[0])
+        add.pop(0)
+        real_address = " ".join(add)
+        # print(real_address)
+
+    # # entering the location name
+    getLoc = loc.geocode("Jerusalem " + real_address,timeout=100)
+    if getLoc == None:
+        index = jerusalem_shelters[(jerusalem_shelters.Address == real_address)].index
+        jerusalem_shelters.drop(index)
+        continue
+    # jerusalem_shelters.insert()
 
 
 
-        # #latitude and longitude dictionary!!!
-        add_long_lat[real_address] = [getLoc.longitude,getLoc.latitude]
+    # #latitude and longitude dictionary!!!
+    add_long_lat[real_address] = [getLoc.longitude,getLoc.latitude]
 
 
 
@@ -52,3 +52,4 @@ shelters_data = [
     {"shelter_number": 8, "address": "Shelter 8, Tel Aviv", "capacity": 220, "longitude": 34.7723, "latitude": 32.0784},
     {"shelter_number": 9, "address": "Rothschild Shelter, Tel Aviv", "capacity": 130, "longitude": 34.7707, "latitude": 32.0670},
     {"shelter_number": 10, "address": "Hadar Yosef Shelter, Tel Aviv", "capacity": 140, "longitude": 34.7982, "latitude": 32.0781},
+]
