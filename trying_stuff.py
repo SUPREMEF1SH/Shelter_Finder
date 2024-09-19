@@ -4,7 +4,6 @@ import tempfile
 import webbrowser
 import pandas as pd
 import os
-from geopy.distance import great_circle
 
 # Temporary user location and shelter data
 temp_user_loc = [32.064, 34.786]
@@ -24,46 +23,32 @@ df.to_csv(csv_file_path, index=False)
 # Read shelter data from the CSV file
 df = pd.read_csv(csv_file_path)
 
-# Define the radius in pixels
-radius_pixels = 50  # Adjust the radius as needed
-
-# Convert pixels to kilometers based on latitude
-# Approximate conversion: 1 pixel at zoom level 17 is about 1 meter
-# This can vary based on the latitude and zoom level, but it's a good approximation.
-lat_in_radians = temp_user_loc[0] * (3.14159 / 180)
-km_per_pixel = 0.00001 * (156543.04 * (2 ** (17))) * (1 / (111320 * (1 / (1 + (0.00335 * (lat_in_radians))**2))**0.5))
-
-# Calculate the radius in kilometers
-radius_km = radius_pixels * km_per_pixel
-
 # Create a map object
 mapObj = folium.Map(temp_user_loc, zoom_start=17)
 mCluster = MarkerCluster(name="Markers Demo").add_to(mapObj)
 
-# Add markers for each shelter within the radius
+# Add markers for each shelter
 for index, row in df.iterrows():
-    shelter_location = eval(row['Location'])  # Convert string to list
-    distance = great_circle(temp_user_loc, shelter_location).kilometers
-
-    if distance <= radius_km:
-        folium.Marker(
-            location=shelter_location,
-            tooltip=row['Name'],
-            popup=f"We now have {row['Current Occupancy']}/{row['Capacity']}",
-            icon=folium.Icon(icon="cloud"),
-        ).add_to(mCluster)
+    location = row['Location'][1:-1].split(', ')  # Extract latitude and longitude
+    folium.Marker(
+        location=[float(location[0]), float(location[1])],
+        tooltip=row['Name'],
+        popup=f"We now have {row['Current Occupancy']}/{row['Capacity']}",
+        icon=folium.Icon(icon="cloud"),
+    ).add_to(mCluster)
 
 folium.LayerControl().add_to(mapObj)
 
 # Add a circle marker for the user's location
+radius = 50
 folium.CircleMarker(
     location=temp_user_loc,
-    radius=radius_pixels,  # Use pixels for the circle marker
-    stroke=True,
-    fill=True,
-    fill_opacity=0.1,
-    color='blue',
-    popup=f"Radius: {radius_pixels} pixels",
+    radius=radius,
+    stroke=False,
+    fill=False,
+    fill_opacity=0.6,
+    opacity=1,
+    popup="{} pixels".format(radius),
 ).add_to(mapObj)
 
 # Save the map to a temporary HTML file and open it
