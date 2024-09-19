@@ -9,10 +9,9 @@ def read_shelters_from_csv(file_path):
             "shelter_number": row['shelter_number'],
             "address": row['address'],
             "capacity": row['capacity'],
-            "current_population": row.get('current_population', 0),
+            "current_population": row.get('current_population', 0),  # Initialize as 0 or appropriate default
             "longitude": row['longitude'],
             "latitude": row['latitude'],
-            "residents": [],
             "utilities": {
                 "Canned beans": row.get('Canned beans', 0),
                 "Canned vegetables": row.get('Canned vegetables', 0),
@@ -53,6 +52,13 @@ def update_shelter(shelters, shelter_number, key, value):
     else:
         print("Error: Shelter not found.")
 
+def get_population_amount(shelters, shelter_number):
+    for shelter in shelters:
+        if shelter['shelter_number'] == shelter_number:
+            return shelter['current_population']
+    print("Error: Shelter not found.")
+    return None
+
 def save_shelters_to_csv(shelters, file_path):
     flattened_data = []
     for shelter in shelters:
@@ -66,17 +72,10 @@ def save_shelters_to_csv(shelters, file_path):
         }
         flat_shelter.update(shelter['utilities'])
 
-        # Flatten residents into separate columns
-        for i in range(5):
-            flat_shelter[f'id_number_{i}'] = shelter['residents'][i][0] if i < len(shelter['residents']) else ''
-            flat_shelter[f'full_name_{i}'] = shelter['residents'][i][1] if i < len(shelter['residents']) else ''
-
         flattened_data.append(flat_shelter)
 
     df = pd.DataFrame(flattened_data)
     df.to_csv(file_path, index=False)
-
-
 
 # Example usage
 file_path = 'shelters_data.csv'
@@ -85,8 +84,13 @@ print(shelters_data)
 
 # Updating shelter example
 update_shelter(shelters_data, 1, 'capacity', 160)
-update_shelter(shelters_data, 1, 'current_population', 120)  # Update current population
 update_shelter(shelters_data, 2, 'utilities', {'Canned beans': 220})
 
 # Update CSV
 save_shelters_to_csv(shelters_data, file_path)
+
+# Get population of a shelter
+shelter_number = 1
+population = get_population_amount(shelters_data, shelter_number)
+if population is not None:
+    print(f"The current population of shelter {shelter_number} is {population}.")
