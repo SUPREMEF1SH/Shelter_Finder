@@ -1,6 +1,6 @@
-shelter_number,address,capacity,longitude,latitude,Canned beans,Canned vegetables,Rice,Pasta,Canned fruit,soap,Instant oatmeal,tooth paste,toilet paper,Shelf-stable milk
-1,"Hatikva Neighborhood Shelter, Tel Aviv",160,34.7736,32.0505,0,0,0,0,0,0,0,0,0,0
-2,"Shelter 4, Tel Aviv",200,34.776,32.059,220,0,0,0,0,0,0,0,0,0
-3,"Shelter 3, Tel Aviv",120,34.7701,32.0726,0,0,0,0,0,0,0,0,0,0
-4,"Neve Sha'anan Shelter, Tel Aviv",180,34.7721,32.0416,0,0,0,0,0,0,0,0,0,0
-5,"Shelter 5, Tel Aviv",100,34.762,32.0548,0,0,0,0,0,0,0,0,0,0
+shelter_number,address,capacity,current_population,longitude,latitude,Canned beans,Canned vegetables,Rice,Pasta,Canned fruit,soap,Instant oatmeal,tooth paste,toilet paper,Shelf-stable milk
+1,"Hatikva Neighborhood Shelter, Tel Aviv",160,"('John Doe', 168935832)",34.7736,32.0505,0,0,0,0,0,0,0,0,0,0
+2,"Shelter 4, Tel Aviv",200,[],34.776,32.059,220,0,0,0,0,0,0,0,0,0
+3,"Shelter 3, Tel Aviv",120,[],34.7701,32.0726,0,0,0,0,0,0,0,0,0,0
+4,"Neve Sha'anan Shelter, Tel Aviv",180,[],34.7721,32.0416,0,0,0,0,0,0,0,0,0,0
+5,"Shelter 5, Tel Aviv",100,[],34.762,32.0548,0,0,0,0,0,0,0,0,0,0
