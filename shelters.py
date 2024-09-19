@@ -55,9 +55,11 @@ def update_shelter(shelters, shelter_number, key, value):
 def get_population_amount(shelters, shelter_number):
     for shelter in shelters:
         if shelter['shelter_number'] == shelter_number:
-            return shelter['current_population']
+            current_population = shelter['current_population']
+            capacity = shelter['capacity']
+            return current_population, capacity
     print("Error: Shelter not found.")
-    return None
+    return None, None
 
 def save_shelters_to_csv(shelters, file_path):
     flattened_data = []
@@ -89,8 +91,9 @@ update_shelter(shelters_data, 2, 'utilities', {'Canned beans': 220})
 # Update CSV
 save_shelters_to_csv(shelters_data, file_path)
 
-# Get population of a shelter
+
 shelter_number = 1
-population = get_population_amount(shelters_data, shelter_number)
-if population is not None:
-    print(f"The current population of shelter {shelter_number} is {population}.")
+current_population, capacity = get_population_amount(shelters_data, shelter_number)
+
+if current_population is not None and capacity is not None:
+    print(f"Shelter {shelter_number} currently has {current_population} people out of a capacity of {capacity}.")
